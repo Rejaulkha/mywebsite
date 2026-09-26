@@ -1,13 +1,4 @@
-body {
-  background: black;
-  color: white;
-  font-family: Arial;
-}
-
-h1 {
-  color: cyan;
-  font-size: 50px;
-}* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -19,26 +10,30 @@ html {
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #0b0f19;
-  color: #f5f7ff;
+  background: #050509;
+  color: #f5f5ff;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 .container {
-  width: min(1100px, 90%);
+  width: min(1120px, 90%);
   margin: auto;
 }
+
+/* ================= HEADER ================= */
 
 .header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: rgba(11, 15, 25, 0.95);
-  border-bottom: 1px solid #202738;
+  z-index: 1000;
+  background: rgba(5, 5, 9, 0.82);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .nav {
-  height: 72px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,12 +42,13 @@ body {
 .logo {
   color: white;
   text-decoration: none;
-  font-size: 25px;
-  font-weight: 800;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 .logo span {
-  color: #6c63ff;
+  color: #9b5cff;
 }
 
 nav {
@@ -61,53 +57,98 @@ nav {
 }
 
 nav a {
-  color: #b9c0d0;
+  color: #bdbdca;
   text-decoration: none;
   font-size: 15px;
+  transition: 0.3s;
 }
 
 nav a:hover {
-  color: white;
+  color: #a970ff;
 }
 
+/* ================= HERO ================= */
+
 .hero {
-  min-height: 90vh;
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+
   background:
-    radial-gradient(circle at 80% 20%, #252050, transparent 35%),
-    #0b0f19;
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(130, 60, 255, 0.35),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 20% 75%,
+      rgba(80, 30, 160, 0.22),
+      transparent 30%
+    ),
+    #050509;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: rgba(125, 60, 255, 0.22);
+  filter: blur(130px);
+  right: 5%;
+  top: 10%;
+  animation: glow 6s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    transform: scale(0.8);
+    opacity: 0.45;
+  }
+
+  to {
+    transform: scale(1.25);
+    opacity: 0.8;
+  }
 }
 
 .hero-content {
-  padding: 90px 0;
+  position: relative;
+  z-index: 2;
+  padding: 100px 0;
 }
 
 .tag {
-  color: #8e87ff;
+  color: #a970ff;
   font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-bottom: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
 }
 
 h1 {
-  font-size: clamp(48px, 8vw, 86px);
-  line-height: 1.05;
-  letter-spacing: -3px;
-  margin-bottom: 25px;
+  font-size: clamp(48px, 8vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -4px;
+  margin-bottom: 28px;
 }
 
 h1 span {
-  color: #8178ff;
+  color: #a970ff;
+  text-shadow: 0 0 35px rgba(155, 92, 255, 0.35);
 }
 
 .intro {
-  max-width: 620px;
-  color: #aeb6c8;
+  max-width: 650px;
+  color: #a9a9b6;
   font-size: 19px;
-  margin-bottom: 35px;
+  margin-bottom: 38px;
 }
+
+/* ================= BUTTONS ================= */
 
 .buttons {
   display: flex;
@@ -117,47 +158,63 @@ h1 span {
 
 .btn {
   display: inline-block;
-  padding: 13px 23px;
-  border-radius: 8px;
+  padding: 14px 26px;
+  border-radius: 50px;
   text-decoration: none;
   font-weight: 700;
+  transition: 0.3s;
 }
 
 .primary {
-  background: #6c63ff;
   color: white;
+  background: linear-gradient(135deg, #7138ff, #a970ff);
+  box-shadow: 0 10px 35px rgba(113, 56, 255, 0.22);
 }
 
 .primary:hover {
-  background: #574ee8;
+  transform: translateY(-4px);
+  box-shadow: 0 15px 45px rgba(113, 56, 255, 0.45);
 }
 
 .secondary {
-  border: 1px solid #343b4f;
   color: white;
+  border: 1px solid #7040c9;
+  background: rgba(255,255,255,0.02);
 }
 
+.secondary:hover {
+  transform: translateY(-4px);
+  border-color: #a970ff;
+  background: rgba(155,92,255,0.08);
+}
+
+/* ================= SECTIONS ================= */
+
 .section {
-  padding: 100px 0;
-  border-top: 1px solid #202738;
+  padding: 110px 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  position: relative;
 }
 
 h2 {
-  font-size: clamp(34px, 5vw, 52px);
-  line-height: 1.15;
-  margin-bottom: 25px;
+  font-size: clamp(35px, 5vw, 55px);
+  line-height: 1.1;
+  margin-bottom: 28px;
+  letter-spacing: -2px;
 }
 
 .text {
   max-width: 720px;
-  color: #aeb6c8;
+  color: #a6a6b4;
   font-size: 17px;
 }
+
+/* ================= STATS ================= */
 
 .stats {
   display: flex;
   gap: 70px;
-  margin-top: 45px;
+  margin-top: 50px;
   flex-wrap: wrap;
 }
 
@@ -167,67 +224,102 @@ h2 {
 }
 
 .stats strong {
-  font-size: 28px;
+  font-size: 30px;
+  color: white;
 }
 
 .stats span {
-  color: #8d96aa;
+  color: #777787;
+}
+
+/* ================= SERVICES ================= */
+
+.services {
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(70,30,130,0.14),
+      transparent 50%
+    );
 }
 
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  margin-top: 45px;
+  gap: 24px;
+  margin-top: 50px;
 }
 
 .card {
-  padding: 30px;
-  border: 1px solid #252d40;
-  border-radius: 14px;
-  background: #101624;
-  transition: transform .2s, border-color .2s;
+  padding: 35px 30px;
+  min-height: 230px;
+
+  background: rgba(255,255,255,0.035);
+
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 20px;
+
+  transition: 0.35s;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  border-color: #6c63ff;
+  transform: translateY(-10px);
+  border-color: #8b52ed;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.45),
+    0 0 30px rgba(123,63,242,0.12);
 }
 
 .icon {
-  color: #8e87ff;
-  font-weight: 800;
-  margin-bottom: 25px;
+  color: #a970ff;
+  font-size: 15px;
+  font-weight: 900;
+  margin-bottom: 30px;
 }
 
 .card h3 {
-  font-size: 23px;
-  margin-bottom: 12px;
+  font-size: 24px;
+  margin-bottom: 13px;
 }
 
-.card p,
-.project p {
-  color: #9da6b9;
+.card p {
+  color: #9696a5;
 }
+
+/* ================= PROJECTS ================= */
 
 .project-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
-  margin-top: 45px;
+  gap: 24px;
+  margin-top: 50px;
 }
 
 .project {
   padding: 35px;
-  min-height: 180px;
-  background: #101624;
-  border: 1px solid #252d40;
-  border-radius: 14px;
+  min-height: 190px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.055),
+    rgba(255,255,255,0.018)
+  );
+
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+
+  transition: 0.3s;
+}
+
+.project:hover {
+  transform: translateY(-7px);
+  border-color: #8050d7;
 }
 
 .project span {
-  color: #8e87ff;
-  font-weight: 800;
+  color: #a970ff;
+  font-weight: 900;
 }
 
 .project h3 {
@@ -235,41 +327,96 @@ h2 {
   font-size: 24px;
 }
 
+.project p {
+  color: #9696a5;
+}
+
+/* ================= CONTACT ================= */
+
 .contact {
   text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(105,45,190,0.18),
+      transparent 55%
+    );
 }
 
 .contact .text {
-  margin: 0 auto 30px;
+  margin: 0 auto 32px;
 }
 
+/* ================= FOOTER ================= */
+
 footer {
-  padding: 30px 0;
-  border-top: 1px solid #202738;
-  color: #7f899d;
+  padding: 35px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: #707080;
   text-align: center;
   font-size: 14px;
 }
 
+/* ================= MOBILE ================= */
+
 @media (max-width: 700px) {
+
+  .nav {
+    min-height: 65px;
+  }
+
+  .logo {
+    font-size: 23px;
+  }
+
   nav {
     gap: 12px;
   }
 
   nav a {
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: calc(100vh - 65px);
+  }
+
+  .hero-content {
+    padding: 80px 0;
   }
 
   h1 {
-    letter-spacing: -2px;
+    font-size: clamp(45px, 14vw, 68px);
+    letter-spacing: -3px;
   }
 
-  .cards,
+  .intro {
+    font-size: 17px;
+  }
+
+  .section {
+    padding: 80px 0;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
   .project-grid {
     grid-template-columns: 1fr;
   }
 
   .stats {
     gap: 30px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    text-align: center;
   }
 }
