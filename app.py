@@ -3,13 +3,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg
 from flask import Flask, request, jsonify, send_from_directory, session
 from flask_cors import CORS
-
 app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY", "change-this-secret-in-render")
 
-CORS(app)
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
+CORS(
+    app,
+    supports_credentials=True,
+    origins=["https://rejaulkha.github.io"]
+)
 
 def get_db():
     database_url = os.getenv("DATABASE_URL")
