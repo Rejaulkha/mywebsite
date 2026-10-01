@@ -1,9 +1,13 @@
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session
 from flask_cors import CORS
 
 app = Flask(__name__)
+
+app.secret_key = os.getenv("SECRET_KEY", "change-this-secret-in-render")
+
 CORS(app)
 
 
@@ -33,9 +37,45 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS admins (
+                    id SERIAL PRIMARY KEY,
+                    username TEXT UNIQUE NOT NULL,
+                    password TEXT NOT NULL
+                )
+            """)
         conn.commit()
 
+@app.route("/api/admin/login", methods=["POST"])
+def admin_login():
+    data = request.get_json(silent=True) or {}
 
+    username = data.get("username", "").strip()
+    password = data.get("password", "")
+
+    admin_username = os.getenv("ADMIN_USERNAME")
+    admin_password_hash = os.getenv("ADMIN_PASSWORD_HASH")
+
+    if not admin_username or not admin_password_hash:
+        return jsonify({
+            "success": False,
+            "message": "Admin login is not configured."
+        }), 500
+
+    if username != admin_username or not check_password_hash(
+        admin_password_hash, password
+    ):
+        return jsonify({
+            "success": False,
+            "message": "Invalid username or password."
+        }), 401
+
+    session["admin_logged_in"] = True
+
+    return jsonify({
+        "success": True,
+        "message": "Admin login successful! ✅"
+    })
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
