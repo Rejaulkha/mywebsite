@@ -1,11 +1,18 @@
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
+
+from werkzeug.security import check_password_hash
 import psycopg
+
 from flask import Flask, request, jsonify, send_from_directory, session
 from flask_cors import CORS
+
+
 app = Flask(__name__)
 
-app.secret_key = os.getenv("SECRET_KEY", "change-this-secret-in-render")
+app.secret_key = os.getenv(
+    "SECRET_KEY",
+    "change-this-secret-in-render"
+)
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SECURE"] = True
@@ -16,6 +23,7 @@ CORS(
     supports_credentials=True,
     origins=["https://rejaulkha.github.io"]
 )
+
 
 def get_db():
     database_url = os.getenv("DATABASE_URL")
@@ -34,6 +42,7 @@ def init_db():
 
     with psycopg.connect(database_url) as conn:
         with conn.cursor() as cur:
+
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS messages (
                     id SERIAL PRIMARY KEY,
@@ -43,6 +52,7 @@ def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS admins (
                     id SERIAL PRIMARY KEY,
@@ -50,51 +60,13 @@ def init_db():
                     password TEXT NOT NULL
                 )
             """)
+
         conn.commit()
-@app.route("/api/admin/messages", methods=["GET"])
-def admin_messages():
-    if not session.get("admin_logged_in"):
-        return jsonify({
-            "success": False,
-            "message": "Unauthorized"
-        }), 401
 
-    try:
-        with get_db() as conn:
-            with conn.cursor() as cur:
-                cur.execute("""
-                    SELECT id, name, email, message, created_at
-                    FROM messages
-                    ORDER BY created_at DESC
-                """)
 
-                rows = cur.fetchall()
-
-        messages = []
-
-        for row in rows:
-            messages.append({
-                "id": row[0],
-                "name": row[1],
-                "email": row[2],
-                "message": row[3],
-                "created_at": row[4].isoformat()
-            })
-
-        return jsonify({
-            "success": True,
-            "messages": messages
-        })
-
-    except Exception as e:
-        print("Messages database error:", e)
-
-        return jsonify({
-            "success": False,
-            "message": "Unable to load messages."
-        }), 500
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
+
     data = request.get_json(silent=True) or {}
 
     username = data.get("username", "").strip()
@@ -110,7 +82,8 @@ def admin_login():
         }), 500
 
     if username != admin_username or not check_password_hash(
-        admin_password_hash, password
+        admin_password_hash,
+        password
     ):
         return jsonify({
             "success": False,
@@ -123,13 +96,82 @@ def admin_login():
         "success": True,
         "message": "Admin login successful! ✅"
     })
+
+
+@app.route("/api/admin/me", methods=["GET"])
+def admin_me():
+
+    if not session.get("admin_logged_in"):
+        return jsonify({
+            "success": False,
+            "logged_in": False
+        }), 401
+
+    return jsonify({
+        "success": True,
+        "logged_in": True,
+        "username": os.getenv("ADMIN_USERNAME")
+    })
+
+
+@app.route("/api/admin/messages", methods=["GET"])
+def admin_messages():
+
+    if not session.get("admin_logged_in"):
+        return jsonify({
+            "success": False,
+            "message": "Unauthorized"
+        }), 401
+
+    try:
+
+        with get_db() as conn:
+            with conn.cursor() as cur:
+
+                cur.execute("""
+                    SELECT id, name, email, message, created_at
+                    FROM messages
+                    ORDER BY created_at DESC
+                """)
+
+                rows = cur.fetchall()
+
+        messages = []
+
+        for row in rows:
+
+            messages.append({
+                "id": row[0],
+                "name": row[1],
+                "email": row[2],
+                "message": row[3],
+                "created_at": row[4].isoformat()
+            })
+
+        return jsonify({
+            "success": True,
+            "messages": messages
+        })
+
+    except Exception as e:
+
+        print("Messages database error:", e)
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to load messages."
+        }), 500
+
+
 @app.route("/")
 def home():
+
     return send_from_directory(".", "index.html")
 
 
 @app.route("/api/contact", methods=["POST"])
 def contact_api():
+
     data = request.get_json(silent=True) or {}
 
     name = data.get("name", "").strip()
@@ -137,21 +179,26 @@ def contact_api():
     message = data.get("message", "").strip()
 
     if not name or not email or not message:
+
         return jsonify({
             "success": False,
             "message": "Please fill in all fields."
         }), 400
 
     try:
+
         with get_db() as conn:
             with conn.cursor() as cur:
+
                 cur.execute(
                     """
-                    INSERT INTO messages (name, email, message)
+                    INSERT INTO messages
+                    (name, email, message)
                     VALUES (%s, %s, %s)
                     """,
                     (name, email, message)
                 )
+
             conn.commit()
 
         return jsonify({
@@ -160,6 +207,7 @@ def contact_api():
         })
 
     except Exception as e:
+
         print("Database error:", e)
 
         return jsonify({
@@ -170,42 +218,59 @@ def contact_api():
 
 @app.route("/contact", methods=["POST"])
 def contact():
+
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
     message = request.form.get("message", "").strip()
 
     if not name or not email or not message:
+
         return "Please fill in all fields.", 400
 
     try:
+
         with get_db() as conn:
             with conn.cursor() as cur:
+
                 cur.execute(
                     """
-                    INSERT INTO messages (name, email, message)
+                    INSERT INTO messages
+                    (name, email, message)
                     VALUES (%s, %s, %s)
                     """,
                     (name, email, message)
                 )
+
             conn.commit()
 
         return "Message sent successfully! ✅"
 
     except Exception as e:
+
         print("Database error:", e)
+
         return "Unable to save message.", 500
 
 
 @app.route("/<path:filename>")
 def files(filename):
+
     return send_from_directory(".", filename)
 
 
 try:
+
     init_db()
+
 except Exception as e:
+
     print("Database initialization error:", e)
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )
