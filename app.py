@@ -45,7 +45,48 @@ def init_db():
                 )
             """)
         conn.commit()
+@app.route("/api/admin/messages", methods=["GET"])
+def admin_messages():
+    if not session.get("admin_logged_in"):
+        return jsonify({
+            "success": False,
+            "message": "Unauthorized"
+        }), 401
 
+    try:
+        with get_db() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT id, name, email, message, created_at
+                    FROM messages
+                    ORDER BY created_at DESC
+                """)
+
+                rows = cur.fetchall()
+
+        messages = []
+
+        for row in rows:
+            messages.append({
+                "id": row[0],
+                "name": row[1],
+                "email": row[2],
+                "message": row[3],
+                "created_at": row[4].isoformat()
+            })
+
+        return jsonify({
+            "success": True,
+            "messages": messages
+        })
+
+    except Exception as e:
+        print("Messages database error:", e)
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to load messages."
+        }), 500
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
     data = request.get_json(silent=True) or {}
