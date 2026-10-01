@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejaul | Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #080812;
+            color: white;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-box,
+        .dashboard {
+            background: #111122;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #29294a;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #080812;
+            color: white;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-btn {
+            width: 100%;
+        }
+
+        .logout-btn {
+            float: right;
+        }
+
+        .message {
+            background: #18182b;
+            border: 1px solid #303052;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 12px;
+        }
+
+        .message p {
+            margin: 8px 0;
+            word-wrap: break-word;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #status {
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🔐 Admin Dashboard</h1>
+
+    <div id="loginBox" class="login-box">
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Admin Username"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Admin Password"
+        >
+
+        <button class="login-btn" onclick="adminLogin()">
+            Login
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
+
+    <div id="dashboard" class="dashboard hidden">
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+        <h2>📩 Contact Messages</h2>
+
+        <div id="messages">
+            Loading messages...
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API = "https://mywebsite-1-pfqd.onrender.com";
+
+
+async function adminLogin() {
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    const status =
+        document.getElementById("status");
+
+    try {
+
+        const response = await fetch(
+            API + "/api/admin/login",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            document
+                .getElementById("loginBox")
+                .classList.add("hidden");
+
+            document
+                .getElementById("dashboard")
+                .classList.remove("hidden");
+
+            loadMessages();
+
+        } else {
+
+            status.textContent = data.message;
+
+        }
+
+    } catch (error) {
+
+        status.textContent =
+            "Login failed. Please try again.";
+
+        console.error(error);
+
+    }
+}
+
+
+async function loadMessages() {
+
+    const messagesBox =
+        document.getElementById("messages");
+
+    try {
+
+        const response = await fetch(
+            API + "/api/admin/messages",
+            {
+                credentials: "include"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+
+            messagesBox.textContent =
+                "Unauthorized.";
+
+            return;
+        }
+
+        if (data.messages.length === 0) {
+
+            messagesBox.textContent =
+                "No contact messages yet.";
+
+            return;
+        }
+
+        messagesBox.innerHTML = "";
+
+        data.messages.forEach(msg => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "message";
+
+            div.innerHTML = `
+                <p><strong>Name:</strong>
+                    ${escapeHTML(msg.name)}
+                </p>
+
+                <p><strong>Email:</strong>
+                    ${escapeHTML(msg.email)}
+                </p>
+
+                <p><strong>Message:</strong>
+                    ${escapeHTML(msg.message)}
+                </p>
+
+                <p><strong>Date:</strong>
+                    ${new Date(msg.created_at)
+                        .toLocaleString()}
+                </p>
+            `;
+
+            messagesBox.appendChild(div);
+
+        });
+
+    } catch (error) {
+
+        messagesBox.textContent =
+            "Unable to load messages.";
+
+        console.error(error);
+
+    }
+}
+
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+function logout() {
+
+    location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
