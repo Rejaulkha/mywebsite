@@ -1,47 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contact - MyWebsite</title>
 
-    <title>Contact - MyWebsite</title>
+<link rel="stylesheet" href="css/style.css">
 
-    <link rel="stylesheet" href="css/style.css">
-</head>
+</head><body><header>
+    <h2>MyWebsite</h2><nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+</nav>
 
-<body>
+</header><main>
+    <h1>Contact Us</h1><form id="contactForm">
 
-<header>
-    <h2>MyWebsite</h2>
+    <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Your Name"
+        required
+    >
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="contact.html">Contact</a>
-    </nav>
-</header>
+    <br><br>
 
-<main>
-    <h1>Contact Us</h1>
+    <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Your Email"
+        required
+    >
 
-    <form>
-        <input type="text" placeholder="Your Name" required>
-        <br><br>
+    <br><br>
 
-        <input type="email" placeholder="Your Email" required>
-        <br><br>
+    <textarea
+        id="message"
+        name="message"
+        placeholder="Your Message"
+        rows="6"
+        required
+    ></textarea>
 
-        <textarea placeholder="Your Message" rows="6" required></textarea>
-        <br><br>
+    <br><br>
 
-        <button type="submit">Send Message</button>
-    </form>
-</main>
+    <button type="submit">Send Message</button>
 
-<footer>
+</form>
+
+<p id="status"></p>
+
+</main><footer>
     <p>© 2026 MyWebsite</p>
-</footer>
+</footer><script>
+const form = document.getElementById("contactForm");
+const status = document.getElementById("status");
 
-</body>
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value
+    };
+
+    status.textContent = "Sending...";
+
+    try {
+        const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        status.textContent = result.message;
+
+        if (result.success) {
+            form.reset();
+        }
+
+    } catch (error) {
+        status.textContent = "Something went wrong. Please try again.";
+    }
+});
+</script></body>
 </html>
