@@ -767,3 +767,46 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+  .card:last-child {
+    grid-column: auto;
+  }
+
+  .card,
+  .project {
+    padding: 24px;
+  }
+
+  .contact {
+    padding: 65px 0;
+  }
+
+  .contact-box {
+    padding: 30px 22px;
+    border-radius: 20px;
+  }
+
+  .contact h2 {
+    font-size: clamp(2.1rem, 9vw, 3rem);
+    letter-spacing: -1px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
