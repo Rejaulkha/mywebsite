@@ -1,157 +1,225 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Rejaul's professional website">
-  <title>Rejaul | Digital Services</title>
+  <meta name="theme-color" content="#070914">
+  <meta name="description" content="Rejaul creates modern, responsive websites and digital experiences for individuals and small businesses.">
+
+  <title>Rejaul | Digital Services & Web Design</title>
+
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
 </head>
 
 <body>
 
 <header class="header">
   <div class="container nav">
-    <a href="#" class="logo">Rejaul<span>.</span></a>
+    <a href="#home" class="logo" aria-label="Rejaul home">
+      Rejaul<span>.</span>
+    </a>
 
- <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
-    ☰
-</button>
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Open navigation menu"
+      aria-controls="mainNav"
+      aria-expanded="false"
+      type="button"
+    >
+      ☰
+    </button>
 
-<nav id="mainNav">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#contact">Contact</a>
-</nav>>
+    <nav id="mainNav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact" class="nav-cta">Let's Talk ↗</a>
+    </nav>
   </div>
 </header>
 
 <main>
 
-<section id="home" class="hero">
-  <div class="container hero-content">
-    <p class="tag">WELCOME TO MY WEBSITE</p>
-    <h1>Build. Create.<br><span>Grow Online.</span></h1>
-    <p class="intro">
-      I create clean, modern and responsive digital solutions
-      for individuals and small businesses.
-    </p>
+  <section id="home" class="hero">
+    <div class="container hero-content">
+      <p class="tag">✦ DIGITAL DESIGN & CREATIVE SOLUTIONS</p>
 
-    <div class="buttons">
-      <a href="#services" class="btn primary">My Services</a>
-      <a href="#contact" class="btn secondary">Contact Me</a>
+      <h1>
+        Build your vision.<br>
+        <span>Grow your future.</span>
+      </h1>
+
+      <p class="intro">
+        I create clean, modern and responsive digital experiences
+        that help individuals and small businesses build their
+        online presence.
+      </p>
+
+      <div class="buttons">
+        <a href="#projects" class="btn primary">Explore My Work ↗</a>
+        <a href="#contact" class="btn secondary">Let's Connect</a>
+      </div>
+
+      <p class="hero-note">
+        <span class="status-dot"></span>
+        Available for projects and collaborations
+      </p>
     </div>
-  </div>
-</section>
 
-<section id="about" class="section">
-  <div class="container">
-    <p class="tag">ABOUT ME</p>
-    <h2>Turning ideas into digital experiences.</h2>
+    <div class="hero-glow" aria-hidden="true"></div>
+  </section>
 
-    <p class="text">
-      Welcome! I'm Rejaul. This website is my online space where
-      I showcase my skills, services and projects. My goal is to
-      create simple, useful and professional digital experiences.
-    </p>
-
-    <div class="stats">
+  <section id="about" class="section">
+    <div class="container about-grid">
       <div>
-        <strong>100%</strong>
-        <span>Responsive</span>
+        <p class="tag">01 — ABOUT ME</p>
+        <h2>Turning ideas into <span>digital experiences.</span></h2>
+      </div>
+
+      <div>
+        <p class="text">
+          Hi, I'm Rejaul. I enjoy building websites and exploring
+          creative technology. My focus is on simple design,
+          responsive layouts and useful digital solutions.
+        </p>
+
+        <p class="text">
+          My goal is to help people and small businesses present
+          their ideas professionally online.
+        </p>
+
+        <a href="#contact" class="text-link">Have a project in mind? Let's talk ↗</a>
+      </div>
+    </div>
+
+    <div class="container stats">
+      <div>
+        <strong>Responsive</strong>
+        <span>Mobile-friendly layouts</span>
       </div>
       <div>
-        <strong>24/7</strong>
-        <span>Online Presence</span>
+        <strong>Creative</strong>
+        <span>Modern visual design</span>
       </div>
       <div>
-        <strong>Modern</strong>
-        <span>Design</span>
+        <strong>Focused</strong>
+        <span>Practical digital solutions</span>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="services" class="section services">
-  <div class="container">
-    <p class="tag">WHAT I DO</p>
-    <h2>My Services</h2>
+  <section id="services" class="section services">
+    <div class="container">
+      <p class="tag">02 — WHAT I DO</p>
+      <h2>Services built around <span>your goals.</span></h2>
 
-    <div class="cards">
+      <p class="section-intro">
+        Digital services to help bring your ideas to life.
+      </p>
 
-      <article class="card">
-        <div class="icon">01</div>
-        <h3>Web Design</h3>
-        <p>
-          Modern, mobile-friendly websites designed for a
-          professional online presence.
-        </p>
-      </article>
+      <div class="cards">
+        <article class="card">
+          <div class="icon">01 / WEB</div>
+          <h3>Web Design</h3>
+          <p>
+            Clean, modern and mobile-friendly websites for
+            personal brands and small businesses.
+          </p>
+          <a href="#contact" class="text-link">Discuss a website ↗</a>
+        </article>
 
-      <article class="card">
-        <div class="icon">02</div>
-        <h3>Video Editing</h3>
-        <p>
-          Clean and engaging video editing for social media,
-          YouTube and personal projects.
-        </p>
-      </article>
+        <article class="card">
+          <div class="icon">02 / VIDEO</div>
+          <h3>Video Editing</h3>
+          <p>
+            Engaging edits for social media, YouTube and
+            creative digital content.
+          </p>
+          <a href="#contact" class="text-link">Discuss a project ↗</a>
+        </article>
 
-      <article class="card">
-        <div class="icon">03</div>
-        <h3>Digital Services</h3>
-        <p>
-          Practical digital solutions for personal projects
-          and small businesses.
-        </p>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<section class="section projects">
-  <div class="container">
-    <p class="tag">MY WORK</p>
-    <h2>Featured Projects</h2>
-
-    <div class="project-grid">
-      <div class="project">
-        <span>01</span>
-        <h3>Personal Website</h3>
-        <p>Responsive website hosted with GitHub Pages.</p>
-      </div>
-
-      <div class="project">
-        <span>02</span>
-        <h3>Creative Projects</h3>
-        <p>Digital and visual projects created for the web.</p>
+        <article class="card">
+          <div class="icon">03 / DIGITAL</div>
+          <h3>Digital Solutions</h3>
+          <p>
+            Practical digital support for online projects
+            and small business needs.
+          </p>
+          <a href="#contact" class="text-link">Explore solutions ↗</a>
+        </article>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="contact" class="section contact">
-  <div class="container">
-    <p class="tag">GET IN TOUCH</p>
-    <h2>Let's work together.</h2>
+  <section id="projects" class="section projects">
+    <div class="container">
+      <p class="tag">03 — SELECTED WORK</p>
+      <h2>Projects & <span>experiments.</span></h2>
 
-    <p class="text">
-      Have a project or question? Feel free to contact me.
-    </p>
+      <p class="section-intro">
+        A look at my website development and creative journey.
+      </p>
 
-    <a href="mailto:rk5575444@gmail.com" class="btn primary">
-      Email Me
-    </a>
-  </div>
-</section>
+      <div class="project-grid">
+        <article class="project">
+          <div class="project-top">
+            <span>PROJECT 01</span>
+            <span>↗</span>
+          </div>
+          <h3>Personal Website</h3>
+          <p>
+            A responsive portfolio and digital services website
+            built with HTML, CSS and JavaScript.
+          </p>
+          <span class="project-label">HTML · CSS · JavaScript</span>
+        </article>
+
+        <article class="project">
+          <div class="project-top">
+            <span>PROJECT 02</span>
+            <span>↗</span>
+          </div>
+          <h3>Flask Web Backend</h3>
+          <p>
+            A learning project exploring backend routes,
+            JSON APIs and contact form integration.
+          </p>
+          <span class="project-label">Python · Flask · API</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact">
+    <div class="container contact-box">
+      <p class="tag">04 — GET IN TOUCH</p>
+      <h2>Have an idea?<br><span>Let's build it together.</span></h2>
+
+      <p class="text">
+        Tell me about your project, website or creative idea.
+        Let's explore how we can bring it to life.
+      </p>
+
+      <a
+        href="mailto:rk5575444@gmail.com?subject=Website%20Project%20Inquiry"
+        class="btn primary"
+      >
+        Email Me ↗
+      </a>
+    </div>
+  </section>
 
 </main>
 
-<footer>
-  <div class="container">
-    <p>© 2026 Rejaul. All rights reserved.</p>
+<footer class="footer">
+  <div class="container footer-content">
+    <a href="#home" class="logo">Rejaul<span>.</span></a>
+    <p>© 2026 Rejaul. Built with creativity.</p>
+    <a href="#home" class="text-link">Back to top ↑</a>
   </div>
 </footer>
 
