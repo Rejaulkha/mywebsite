@@ -255,8 +255,35 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    setStatus("AI is thinking... / উত্তর তৈরি হচ্ছে...");
+
+fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    message: text
+  })
+})
+  .then(async (response) => {
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "AI request failed");
+    }
+
+    return data;
+  })
+  .then((data) => {
+    reply(data.answer);
+  })
+  .catch((error) => {
+    console.error("AI Assistant error:", error);
     reply(
-      "আমি এখন website navigation এবং কিছু সাধারণ প্রশ্নে সাহায্য করতে পারি। অন্য প্রশ্নের জন্য আরও AI backend যুক্ত করতে হবে।"
+      "দুঃখিত, AI service এখন কাজ করছে না। একটু পরে আবার চেষ্টা করো।"
+    );
+  });
     );
   }
 
