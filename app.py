@@ -1,4 +1,5 @@
 import os
+from openai import OpenAI
 
 from werkzeug.security import check_password_hash
 import psycopg
