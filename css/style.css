@@ -876,4 +876,14 @@ button:focus-visible {
   #mainNav.active {
     display: flex !important;
   }
+} @media (max-width: 768px) {
+  .menu-toggle {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  #mainNav.active {
+    display: flex !important;
+  }
 }
