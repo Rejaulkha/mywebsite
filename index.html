@@ -222,6 +222,83 @@
     <a href="#home" class="text-link">Back to top ↑</a>
   </div>
 </footer>
+<!-- Rejaul Voice Assistant -->
+<div class="voice-assistant" id="voiceAssistant">
+  <button
+    class="voice-launcher"
+    id="voiceAssistantToggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="voiceAssistantPanel"
+  >
+    🎙️ Voice Assistant
+  </button>
 
-</body>
+  <section
+    class="voice-panel"
+    id="voiceAssistantPanel"
+    aria-label="Voice Assistant"
+    hidden
+  >
+    <div class="voice-header">
+      <div>
+        <h2>Rejaul Assistant</h2>
+        <p>বাংলা ও English-এ কথা বলুন</p>
+      </div>
+
+      <button
+        type="button"
+        id="voiceAssistantClose"
+        aria-label="Close assistant"
+      >✕</button>
+    </div>
+
+    <div
+      class="voice-messages"
+      id="voiceMessages"
+      aria-live="polite"
+    >
+      <p class="voice-message assistant-message">
+        নমস্কার! আমি কীভাবে সাহায্য করতে পারি?
+        <br />
+        Hello! How can I help you?
+      </p>
+    </div>
+
+    <p id="voiceStatus" role="status">
+      Ready / প্রস্তুত
+    </p>
+
+    <div class="voice-controls">
+      <button id="voiceMic" type="button">
+        🎤 Speak
+      </button>
+
+      <select id="voiceLanguage" aria-label="Voice language">
+        <option value="bn-IN">বাংলা</option>
+        <option value="en-IN">English</option>
+      </select>
+    </div>
+
+    <form id="voiceChatForm">
+      <label class="sr-only" for="voiceInput">
+        Ask the assistant
+      </label>
+
+      <input
+        id="voiceInput"
+        type="text"
+        placeholder="কথা লিখুন / Type a message"
+        autocomplete="off"
+      />
+
+      <button type="submit">Send</button>
+    </form>
+
+    <p class="voice-note">
+      Microphone ব্যবহারের জন্য browser permission প্রয়োজন।
+    </p>
+  </section>
+</div>
+</body> 
 </html>
