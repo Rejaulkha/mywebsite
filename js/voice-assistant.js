@@ -188,15 +188,16 @@ document.addEventListener("DOMContentLoaded", () => {
       openSection("#contact");
       reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
       return;
-    }
-
-    if (
-      lower.includes("open home") ||
-      lower.includes("go home") ||
-      lower.includes("হোম খোলো")
-    ) {
-      openSection("#home");
-      return;
+  if (
+  lower.includes("open home") ||
+  lower.includes("go home") ||
+  lower === "home" ||
+  lower.includes("হোম খোলো") ||
+  lower.includes("হোম")
+) {
+  openSection("#home");
+  return;
+  }
     }
 
     if (lower.includes("open about") || lower.includes("about section")) {
