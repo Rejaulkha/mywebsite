@@ -850,3 +850,30 @@ button:focus-visible {
     width: 100%;
   }
 }
+/* FORCE MOBILE MENU BUTTON */
+
+.menu-toggle {
+  color: #ffffff;
+  background: #17152a;
+  border: 1px solid #8b5cf6;
+  border-radius: 10px;
+  font-size: 26px;
+  width: 46px;
+  height: 46px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  z-index: 1002;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  #mainNav.active {
+    display: flex !important;
+  }
+}
