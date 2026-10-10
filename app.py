@@ -268,6 +268,62 @@ except Exception as e:
     print("Database initialization error:", e)
 
 
+@app.route("/api/assistant", methods=["POST"])
+def assistant_api():
+    from flask import jsonify, request
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+
+    if not api_key:
+        return jsonify({
+            "success": False,
+            "message": "AI service is not configured yet."
+        }), 503
+
+    data = request.get_json(silent=True) or {}
+    question = str(data.get("message", "")).strip()
+
+    if not question:
+        return jsonify({
+            "success": False,
+            "message": "Please enter a question."
+        }), 400
+
+    if len(question) > 2000:
+        return jsonify({
+            "success": False,
+            "message": "Your message is too long."
+        }), 400
+
+    try:
+        client = OpenAI(api_key=api_key)
+
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            instructions=(
+                "You are Rejaul Assistant on a professional digital "
+                "services website. Answer helpfully and concisely. "
+                "Reply in Bengali when the user speaks Bengali, and "
+                "in English when the user speaks English. Never claim "
+                "that a contact message was sent unless it really was."
+            ),
+            input=question
+        )
+
+        answer = response.output_text
+
+        return jsonify({
+            "success": True,
+            "answer": answer
+        })
+
+    except Exception:
+        app.logger.exception("AI assistant request failed")
+        return jsonify({
+            "success": False,
+            "message": "AI service is temporarily unavailable."
+        }), 502
+        
 if __name__ == "__main__":
 
     app.run(
