@@ -2,3 +2,4 @@ Flask
 gunicorn
 flask-cors
 psycopg[binary]
+openai
