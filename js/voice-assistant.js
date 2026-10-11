@@ -13,17 +13,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.getElementById("voiceStatus");
 
   if (!toggle || !panel || !form || !input || !messages) {
-    console.warn("Voice Assistant HTML elements were not found.");
+    console.error("Rejaul Assistant: Required HTML elements missing.");
     return;
   }
 
   const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
   let recognition = null;
   let listening = false;
   let contactStep = "";
-  let contactData = {};
 
   function setStatus(text) {
     if (status) status.textContent = text;
@@ -54,11 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function reply(text, shouldSpeak = true) {
     addMessage(text);
     setStatus("Ready / প্রস্তুত");
+
     if (shouldSpeak) speak(text);
   }
 
-  function openSection(section) {
-    const target = document.querySelector(section);
+  function openSection(selector) {
+    const target = document.querySelector(selector);
 
     if (!target) {
       reply("এই section-টি খুঁজে পেলাম না।");
@@ -69,30 +70,22 @@ document.addEventListener("DOMContentLoaded", () => {
     reply("ঠিক আছে! Section খুলে দিচ্ছি।");
   }
 
-  function findContactField(type) {
+  function setContactField(type, value) {
     const contact = document.querySelector("#contact");
+    if (!contact) return false;
 
-    if (!contact) return null;
+    let field = null;
 
     if (type === "name") {
-      return contact.querySelector(
-        'input[name="name"], input[name="full_name"], input[autocomplete="name"], input[type="text"]'
+      field = contact.querySelector(
+        'input[name="name"], input[name="full_name"], ' +
+        'input[autocomplete="name"], input[type="text"]'
       );
+    } else if (type === "email") {
+      field = contact.querySelector('input[type="email"]');
+    } else if (type === "message") {
+      field = contact.querySelector("textarea");
     }
-
-    if (type === "email") {
-      return contact.querySelector('input[type="email"]');
-    }
-
-    if (type === "message") {
-      return contact.querySelector("textarea");
-    }
-
-    return null;
-  }
-
-  function setFieldValue(type, value) {
-    const field = findContactField(type);
 
     if (!field) return false;
 
@@ -102,71 +95,74 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
-  function handleContactFlow(text) {
+  function handleContact(text) {
+    if (!contactStep) return false;
+
     if (contactStep === "name") {
-      contactData.name = text;
-      setFieldValue("name", text);
+      setContactField("name", text);
       contactStep = "email";
-      reply("এবার তোমার email address বলো বা লিখো।");
+      reply("এবার তোমার email address বলো বা লেখো।");
       return true;
     }
 
     if (contactStep === "email") {
-      const email = text.match(
+      const match = text.match(
         /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
       );
 
-      if (!email) {
-        reply("Email address-টি ঠিকভাবে লিখে আবার চেষ্টা করো।");
+      if (!match) {
+        reply("Email ঠিকভাবে বুঝতে পারিনি। আবার বলো বা লিখো।");
         return true;
       }
 
-      contactData.email = email[0];
-      setFieldValue("email", email[0]);
+      setContactField("email", match[0]);
       contactStep = "message";
       reply("এবার তোমার message বলো বা লেখো।");
       return true;
     }
 
     if (contactStep === "message") {
-      contactData.message = text;
-      setFieldValue("message", text);
-      contactStep = "confirm";
-
+      setContactField("message", text);
+      contactStep = "";
       reply(
-        "তোমার তথ্য contact form-এ বসানো হয়েছে। Submit করতে চাইলে Yes বলো, না হলে No বলো। আমি তোমার অনুমতি ছাড়া submit করব না।"
+        "Message contact form-এ বসানো হয়েছে। " +
+        "তথ্য যাচাই করে Submit button-এ চাপ দাও।"
       );
       return true;
     }
 
-    if (contactStep === "confirm") {
-      const answer = text.toLowerCase().trim();
+    return false;
+  }
 
-      if (/^(yes|হ্যাঁ|হ্যাঁ করো|submit|confirm|ঠিক আছে)$/.test(answer)) {
-        const contact = document.querySelector("#contact");
-        const submitButton = contact?.querySelector(
-          'button[type="submit"], input[type="submit"]'
-        );
+  async function askAssistant(text) {
+    setStatus("AI is thinking... / উত্তর তৈরি হচ্ছে...");
 
-        if (submitButton) {
-          contactStep = "";
-          contact.scrollIntoView({ behavior: "smooth" });
-          reply("Submit button প্রস্তুত। পাঠানোর আগে form-টি একবার দেখে button-এ চাপ দাও।");
-        } else {
-          reply("Submit button খুঁজে পেলাম না। Form-টি নিজে দেখে submit করো।");
-          contactStep = "";
+    try {
+      const response = await fetch(
+        "https://mywebsite-0eok.onrender.com/api/assistant",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: text })
         }
-      } else if (/^(no|না|cancel|বাতিল)$/.test(answer)) {
-        contactStep = "";
-        reply("ঠিক আছে। Message submit করা হয়নি।");
-      } else {
-        reply("Submit করতে Yes বলো, অথবা বাতিল করতে No বলো।");
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success || !data.answer) {
+        throw new Error(data.message || "AI request failed");
       }
 
-      return true;
+      reply(data.answer);
+    } catch (error) {
+      console.error("Rejaul Assistant API error:", error);
+      reply(
+        "দুঃখিত, AI service এখন কাজ করছে না। " +
+        "সাধারণ command ব্যবহার করো অথবা পরে চেষ্টা করো।"
+      );
     }
-
-    return false;
   }
 
   function handleMessage(originalText) {
@@ -175,49 +171,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!text) return;
 
-    if (handleContactFlow(text)) return;
+    if (handleContact(text)) return;
 
-if (
-  lower.includes("contact form") ||
-  lower.includes("fill form") ||
-  lower.includes("যোগাযোগ") ||
-  lower.includes("কন্টাক্ট ফর্ম")
-) {
-  contactStep = "name";
-  contactData = {};
-  openSection("#contact");
-  reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
-  return;
-}
-
-if (
-  lower.includes("open home") ||
-  lower.includes("go home") ||
-  lower === "home" ||
-  lower.includes("হোম খোলো") ||
-  lower.includes("হোম")
-) {
-  openSection("#home");
-  return;
-}
+    if (
+      lower.includes("contact form") ||
+      lower.includes("fill form") ||
+      lower.includes("যোগাযোগ") ||
+      lower.includes("কন্টাক্ট ফর্ম")
+    ) {
+      contactStep = "name";
+      openSection("#contact");
+      reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
+      return;
     }
 
-    if (lower.includes("open about") || lower.includes("about section")) {
+    if (
+      lower.includes("open home") ||
+      lower.includes("go home") ||
+      lower === "home" ||
+      lower.includes("হোম")
+    ) {
+      openSection("#home");
+      return;
+    }
+
+    if (
+      lower.includes("open about") ||
+      lower.includes("about section") ||
+      lower.includes("অ্যাবাউট")
+    ) {
       openSection("#about");
       return;
     }
 
-    if (lower.includes("open services") || lower.includes("সার্ভিস খোলো")) {
+    if (
+      lower.includes("open services") ||
+      lower.includes("সার্ভিস খোলো") ||
+      lower.includes("সার্ভিস")
+    ) {
       openSection("#services");
       return;
     }
 
-    if (lower.includes("open projects") || lower.includes("প্রজেক্ট খোলো")) {
+    if (
+      lower.includes("open projects") ||
+      lower.includes("প্রজেক্ট খোলো")
+    ) {
       openSection("#projects");
       return;
     }
 
-    if (lower.includes("open contact") || lower.includes("contact section")) {
+    if (
+      lower.includes("open contact") ||
+      lower.includes("contact section")
+    ) {
       openSection("#contact");
       return;
     }
@@ -226,16 +233,10 @@ if (
       lower.includes("who are you") ||
       lower.includes("তুমি কে")
     ) {
-      reply("আমি Rejaul-এর website voice assistant। বাংলা ও English-এ সাহায্য করার চেষ্টা করি।");
-      return;
-    }
-
-    if (
-      lower.includes("what services") ||
-      lower.includes("তুমি কি কাজ করো")
-    ) {
-      reply("Services section খুলে দেখো। সেখানে website-এর services সম্পর্কে জানতে পারবে।");
-      openSection("#services");
+      reply(
+        "আমি Rejaul-এর website voice assistant। " +
+        "বাংলা ও English-এ সাহায্য করার চেষ্টা করি।"
+      );
       return;
     }
 
@@ -257,38 +258,10 @@ if (
       return;
     }
 
-    setStatus("AI is thinking... / উত্তর তৈরি হচ্ছে...");
-
-fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    message: text
-  })
-})
-  .then(async (response) => {
-    const data = await response.json();
-
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || "AI request failed");
-    }
-
-    return data;
-  })
-  .then((data) => {
-    reply(data.answer);
-  })
-  .catch((error) => {
-    console.error("AI Assistant error:", error);
-    reply(
-      "দুঃখিত, AI service এখন কাজ করছে না। একটু পরে আবার চেষ্টা করো।"
-    );
-  });
-    );
+    askAssistant(text);
   }
 
+  // Open and close the assistant panel
   toggle.addEventListener("click", () => {
     const opening = panel.hidden;
     panel.hidden = !opening;
@@ -302,6 +275,7 @@ fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
     toggle.setAttribute("aria-expanded", "false");
   });
 
+  // Text message submission
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -313,16 +287,21 @@ fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
     handleMessage(text);
   });
 
+  // Microphone and speech recognition
   if (mic) {
     if (!SpeechRecognition) {
       mic.addEventListener("click", () => {
-        reply("এই browser-এ voice recognition support নেই। Chrome-এ চেষ্টা করো অথবা message লিখে পাঠাও।");
+        reply(
+          "এই browser-এ speech recognition সমর্থিত নয়। " +
+          "Chrome-এ চেষ্টা করো অথবা message লিখে পাঠাও।"
+        );
       });
     } else {
       recognition = new SpeechRecognition();
       recognition.lang = language?.value || "bn-IN";
       recognition.interimResults = false;
       recognition.continuous = false;
+      recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
         listening = true;
@@ -331,20 +310,41 @@ fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
       };
 
       recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
+        const transcript =
+          event.results[0][0].transcript.trim();
+
+        if (!transcript) {
+          setStatus("কথা বুঝতে পারিনি / No speech detected");
+          return;
+        }
+
         input.value = transcript;
         addMessage(transcript, "user");
         handleMessage(transcript);
       };
 
       recognition.onerror = (event) => {
-        setStatus("Microphone: " + event.error);
+        console.error("Speech recognition error:", event.error);
+
+        const errors = {
+          "not-allowed": "Microphone permission Allow করো।",
+          "service-not-allowed": "Browser speech service অনুমোদিত নয়।",
+          "no-speech": "কোনো কথা শনাক্ত হয়নি। আবার চেষ্টা করো।",
+          "network": "Speech service-এর network সমস্যা হয়েছে।",
+          "audio-capture": "Microphone পাওয়া যাচ্ছে না।"
+        };
+
+        setStatus(
+          "Mic Error: " +
+          (errors[event.error] || event.error)
+        );
       };
 
       recognition.onend = () => {
         listening = false;
         mic.textContent = "🎤 Speak";
-        if (status && status.textContent.includes("Listening")) {
+
+        if (status?.textContent.includes("Listening")) {
           setStatus("Ready / প্রস্তুত");
         }
       };
@@ -359,8 +359,10 @@ fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
 
         try {
           recognition.start();
+          setStatus("Starting microphone...");
         } catch (error) {
-          setStatus("আবার চেষ্টা করো / Please try again");
+          console.error("Microphone start error:", error);
+          setStatus("Mic start failed: " + error.message);
         }
       });
 
@@ -372,4 +374,3 @@ fetch("https://mywebsite-0eok.onrender.com/api/assistant", {
 
   setStatus("Ready / প্রস্তুত");
 });
-        
