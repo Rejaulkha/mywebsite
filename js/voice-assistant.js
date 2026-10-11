@@ -177,18 +177,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (handleContactFlow(text)) return;
 
-    if (
-      lower.includes("contact form") ||
-      lower.includes("fill form") ||
-      lower.includes("যোগাযোগ") ||
-      lower.includes("কন্টাক্ট ফর্ম")
-    ) {
-      contactStep = "name";
-      contactData = {};
-      openSection("#contact");
-      reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
-      return;
-  if (
+if (
+  lower.includes("contact form") ||
+  lower.includes("fill form") ||
+  lower.includes("যোগাযোগ") ||
+  lower.includes("কন্টাক্ট ফর্ম")
+) {
+  contactStep = "name";
+  contactData = {};
+  openSection("#contact");
+  reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
+  return;
+}
+
+if (
   lower.includes("open home") ||
   lower.includes("go home") ||
   lower === "home" ||
@@ -197,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
 ) {
   openSection("#home");
   return;
-  }
+}
     }
 
     if (lower.includes("open about") || lower.includes("about section")) {
