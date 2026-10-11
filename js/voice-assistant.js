@@ -1,41 +1,60 @@
-
 /* REJAUL BILINGUAL VOICE ASSISTANT */
+(() => {
+  "use strict";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("voiceAssistantToggle");
-  const panel = document.getElementById("voiceAssistantPanel");
-  const close = document.getElementById("voiceAssistantClose");
-  const mic = document.getElementById("voiceMic");
-  const language = document.getElementById("voiceLanguage");
-  const form = document.getElementById("voiceChatForm");
-  const input = document.getElementById("voiceInput");
-  const messages = document.getElementById("voiceMessages");
-  const status = document.getElementById("voiceStatus");
+  const BACKEND_URL =
+    "https://mywebsite-0eok.onrender.com/api/assistant";
 
-  if (!toggle || !panel || !form || !input || !messages) {
-    console.error("Rejaul Assistant: Required HTML elements missing.");
-    return;
+  const byId = (id) => document.getElementById(id);
+
+  const panel =
+    byId("assistantPanel") || byId("voiceAssistantPanel");
+  const toggle =
+    byId("assistantToggle") || byId("voiceAssistantButton");
+  const closeBtn =
+    byId("assistantClose") || byId("closeAssistant");
+  const input =
+    byId("assistantInput") || byId("voiceInput");
+  const sendBtn =
+    byId("assistantSend") || byId("sendAssistant");
+  const micBtn =
+    byId("assistantMic") || byId("speakButton") ||
+    byId("voiceButton");
+  const messages =
+    byId("assistantMessages") || byId("chatMessages");
+  const status =
+    byId("voiceStatus") || byId("assistantStatus");
+
+  function setStatus(message) {
+    if (status) status.textContent = message;
   }
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  let recognition = null;
-  let listening = false;
-  let contactStep = "";
-
-  function setStatus(text) {
-    if (status) status.textContent = text;
+  function openPanel() {
+    if (panel) {
+      panel.hidden = false;
+      panel.classList.add("open", "active");
+    }
+    if (toggle) toggle.setAttribute("aria-expanded", "true");
   }
 
-  function addMessage(text, sender = "assistant") {
-    const message = document.createElement("p");
-    message.className =
-      "voice-message " +
-      (sender === "user" ? "user-message" : "assistant-message");
-    message.textContent = text;
-    messages.appendChild(message);
+  function closePanel() {
+    if (panel) {
+      panel.hidden = true;
+      panel.classList.remove("open", "active");
+    }
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function addMessage(text, who) {
+    if (!messages) {
+      console.log(who + ": " + text);
+      return;
+    }
+
+    const item = document.createElement("div");
+    item.className = "assistant-message " + who;
+    item.textContent = text;
+    messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
   }
 
@@ -43,201 +62,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!("speechSynthesis" in window)) return;
 
     window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = language?.value || "bn-IN";
-    utterance.rate = 0.95;
+    utterance.lang =
+      /[\u0980-\u09FF]/.test(text) ? "bn-IN" : "en-IN";
 
     window.speechSynthesis.speak(utterance);
   }
 
-  function reply(text, shouldSpeak = true) {
-    addMessage(text);
-    setStatus("Ready / প্রস্তুত");
-
-    if (shouldSpeak) speak(text);
-  }
-
-  function openSection(selector) {
-    const target = document.querySelector(selector);
-
-    if (!target) {
-      reply("এই section-টি খুঁজে পেলাম না।");
-      return;
-    }
-
-    target.scrollIntoView({ behavior: "smooth" });
-    reply("ঠিক আছে! Section খুলে দিচ্ছি।");
-  }
-
-  function setContactField(type, value) {
-    const contact = document.querySelector("#contact");
-    if (!contact) return false;
-
-    let field = null;
-
-    if (type === "name") {
-      field = contact.querySelector(
-        'input[name="name"], input[name="full_name"], ' +
-        'input[autocomplete="name"], input[type="text"]'
-      );
-    } else if (type === "email") {
-      field = contact.querySelector('input[type="email"]');
-    } else if (type === "message") {
-      field = contact.querySelector("textarea");
-    }
-
-    if (!field) return false;
-
-    field.value = value;
-    field.dispatchEvent(new Event("input", { bubbles: true }));
-    field.dispatchEvent(new Event("change", { bubbles: true }));
-    return true;
-  }
-
-  function handleContact(text) {
-    if (!contactStep) return false;
-
-    if (contactStep === "name") {
-      setContactField("name", text);
-      contactStep = "email";
-      reply("এবার তোমার email address বলো বা লেখো।");
-      return true;
-    }
-
-    if (contactStep === "email") {
-      const match = text.match(
-        /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
-      );
-
-      if (!match) {
-        reply("Email ঠিকভাবে বুঝতে পারিনি। আবার বলো বা লিখো।");
-        return true;
-      }
-
-      setContactField("email", match[0]);
-      contactStep = "message";
-      reply("এবার তোমার message বলো বা লেখো।");
-      return true;
-    }
-
-    if (contactStep === "message") {
-      setContactField("message", text);
-      contactStep = "";
-      reply(
-        "Message contact form-এ বসানো হয়েছে। " +
-        "তথ্য যাচাই করে Submit button-এ চাপ দাও।"
-      );
-      return true;
-    }
-
-    return false;
-  }
-
-  async function askAssistant(text) {
-    setStatus("AI is thinking... / উত্তর তৈরি হচ্ছে...");
-
-    try {
-      const response = await fetch(
-        "https://mywebsite-0eok.onrender.com/api/assistant",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: text })
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success || !data.answer) {
-        throw new Error(data.message || "AI request failed");
-      }
-
-      reply(data.answer);
-    } catch (error) {
-      console.error("Rejaul Assistant API error:", error);
-      reply(
-        "দুঃখিত, AI service এখন কাজ করছে না। " +
-        "সাধারণ command ব্যবহার করো অথবা পরে চেষ্টা করো।"
-      );
-    }
-  }
-
-  function handleMessage(originalText) {
-    const text = originalText.trim();
-    const lower = text.toLowerCase();
-
-    if (!text) return;
-
-    if (handleContact(text)) return;
-
-    if (
-      lower.includes("contact form") ||
-      lower.includes("fill form") ||
-      lower.includes("যোগাযোগ") ||
-      lower.includes("কন্টাক্ট ফর্ম")
-    ) {
-      contactStep = "name";
-      openSection("#contact");
-      reply("চলো contact form পূরণ করি। প্রথমে তোমার নাম বলো বা লেখো।");
-      return;
-    }
+  function localAnswer(message) {
+    const lower = message.toLowerCase().trim();
 
     if (
       lower.includes("open home") ||
-      lower.includes("go home") ||
-      lower === "home" ||
-      lower.includes("হোম")
+      lower.includes("home page") ||
+      lower.includes("হোম পেজ")
     ) {
-      openSection("#home");
-      return;
+      window.location.href = "index.html";
+      return "হোম পেজ খুলছি।";
     }
 
     if (
       lower.includes("open about") ||
-      lower.includes("about section") ||
+      lower.includes("about page") ||
       lower.includes("অ্যাবাউট")
     ) {
-      openSection("#about");
-      return;
+      window.location.href = "about.html";
+      return "About পেজ খুলছি।";
     }
 
     if (
       lower.includes("open services") ||
-      lower.includes("সার্ভিস খোলো") ||
+      lower.includes("services page") ||
       lower.includes("সার্ভিস")
     ) {
-      openSection("#services");
-      return;
-    }
-
-    if (
-      lower.includes("open projects") ||
-      lower.includes("প্রজেক্ট খোলো")
-    ) {
-      openSection("#projects");
-      return;
+      window.location.href = "services.html";
+      return "Services পেজ খুলছি।";
     }
 
     if (
       lower.includes("open contact") ||
-      lower.includes("contact section")
+      lower.includes("contact page") ||
+      lower.includes("যোগাযোগ")
     ) {
-      openSection("#contact");
-      return;
-    }
-
-    if (
-      lower.includes("who are you") ||
-      lower.includes("তুমি কে")
-    ) {
-      reply(
-        "আমি Rejaul-এর website voice assistant। " +
-        "বাংলা ও English-এ সাহায্য করার চেষ্টা করি।"
-      );
-      return;
+      window.location.href = "contact.html";
+      return "Contact পেজ খুলছি।";
     }
 
     if (
@@ -246,131 +114,155 @@ document.addEventListener("DOMContentLoaded", () => {
       lower.includes("নমস্কার") ||
       lower.includes("হ্যালো")
     ) {
-      reply("Hello! নমস্কার! কীভাবে সাহায্য করতে পারি?");
-      return;
+      return "নমস্কার! আমি Rejaul Assistant। কীভাবে সাহায্য করতে পারি?";
     }
 
-    if (
-      lower.includes("thank you") ||
-      lower.includes("ধন্যবাদ")
-    ) {
-      reply("You're welcome! তোমাকে সাহায্য করতে পেরে ভালো লাগল।");
-      return;
-    }
-
-    askAssistant(text);
+    return null;
   }
 
-  // Open and close the assistant panel
-  toggle.addEventListener("click", () => {
-    const opening = panel.hidden;
-    panel.hidden = !opening;
-    toggle.setAttribute("aria-expanded", String(opening));
+  async function handleMessage(rawMessage) {
+    const message = String(rawMessage || "").trim();
 
-    if (opening) input.focus();
-  });
+    if (!message) {
+      setStatus("প্রথমে কিছু লিখুন বা বলুন।");
+      return;
+    }
 
-  close?.addEventListener("click", () => {
-    panel.hidden = true;
-    toggle.setAttribute("aria-expanded", "false");
-  });
+    addMessage(message, "user");
+    if (input) input.value = "";
+    setStatus("উত্তর খুঁজছি...");
 
-  // Text message submission
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+    const answer = localAnswer(message);
 
-    const text = input.value.trim();
-    if (!text) return;
+    if (answer) {
+      addMessage(answer, "assistant");
+      speak(answer);
+      setStatus("প্রস্তুত");
+      return;
+    }
 
-    addMessage(text, "user");
-    input.value = "";
-    handleMessage(text);
-  });
-
-  // Microphone and speech recognition
-  if (mic) {
-    if (!SpeechRecognition) {
-      mic.addEventListener("click", () => {
-        reply(
-          "এই browser-এ speech recognition সমর্থিত নয়। " +
-          "Chrome-এ চেষ্টা করো অথবা message লিখে পাঠাও।"
-        );
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: message,
+          question: message
+        })
       });
-    } else {
-      recognition = new SpeechRecognition();
-      recognition.lang = language?.value || "bn-IN";
-      recognition.interimResults = false;
-      recognition.continuous = false;
-      recognition.maxAlternatives = 1;
 
-      recognition.onstart = () => {
-        listening = true;
-        setStatus("Listening... / শুনছি...");
-        mic.textContent = "🔴 Listening";
-      };
+      const data = await response.json().catch(() => ({}));
 
-      recognition.onresult = (event) => {
-        const transcript =
-          event.results[0][0].transcript.trim();
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Backend error: " + response.status
+        );
+      }
 
-        if (!transcript) {
-          setStatus("কথা বুঝতে পারিনি / No speech detected");
-          return;
-        }
+      const reply =
+        data.reply ||
+        data.answer ||
+        data.response ||
+        data.message ||
+        "সার্ভার থেকে উত্তর পাওয়া যায়নি।";
 
-        input.value = transcript;
-        addMessage(transcript, "user");
-        handleMessage(transcript);
-      };
+      addMessage(reply, "assistant");
+      speak(reply);
+      setStatus("প্রস্তুত");
+    } catch (error) {
+      console.error("Rejaul Assistant:", error);
+      addMessage(
+        "দুঃখিত, সার্ভারের সঙ্গে যোগাযোগ করা যাচ্ছে না। পরে আবার চেষ্টা করুন।",
+        "assistant"
+      );
+      setStatus("সংযোগ সমস্যা: " + error.message);
+    }
+  }
 
-      recognition.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-        const errors = {
-          "not-allowed": "Microphone permission Allow করো।",
-          "service-not-allowed": "Browser speech service অনুমোদিত নয়।",
-          "no-speech": "কোনো কথা শনাক্ত হয়নি। আবার চেষ্টা করো।",
-          "network": "Speech service-এর network সমস্যা হয়েছে।",
-          "audio-capture": "Microphone পাওয়া যাচ্ছে না।"
-        };
+  let recognition = null;
+  let listening = false;
 
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = "bn-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      listening = true;
+      setStatus("শুনছি... এখন কথা বলুন।");
+      if (micBtn) micBtn.setAttribute("aria-pressed", "true");
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      if (input) input.value = transcript;
+      handleMessage(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      setStatus("মাইক্রোফোন সমস্যা: " + event.error);
+    };
+
+    recognition.onend = () => {
+      listening = false;
+      if (micBtn) micBtn.setAttribute("aria-pressed", "false");
+    };
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      if (panel && !panel.hidden &&
+          panel.classList.contains("open")) {
+        closePanel();
+      } else {
+        openPanel();
+      }
+    });
+  }
+
+  if (closeBtn) closeBtn.addEventListener("click", closePanel);
+
+  if (sendBtn) {
+    sendBtn.addEventListener("click", () =>
+      handleMessage(input ? input.value : "")
+    );
+  }
+
+  if (input) {
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleMessage(input.value);
+      }
+    });
+  }
+
+  if (micBtn) {
+    micBtn.addEventListener("click", () => {
+      if (!recognition) {
         setStatus(
-          "Mic Error: " +
-          (errors[event.error] || event.error)
+          "এই ব্রাউজারে Voice Recognition নেই। Android Chrome-এ চেষ্টা করুন।"
         );
-      };
+        return;
+      }
 
-      recognition.onend = () => {
-        listening = false;
-        mic.textContent = "🎤 Speak";
+      if (listening) {
+        recognition.stop();
+        return;
+      }
 
-        if (status?.textContent.includes("Listening")) {
-          setStatus("Ready / প্রস্তুত");
-        }
-      };
-
-      mic.addEventListener("click", () => {
-        if (listening) {
-          recognition.stop();
-          return;
-        }
-
-        recognition.lang = language?.value || "bn-IN";
-
-        try {
-          recognition.start();
-          setStatus("Starting microphone...");
-        } catch (error) {
-          console.error("Microphone start error:", error);
-          setStatus("Mic start failed: " + error.message);
-        }
-      });
-
-      language?.addEventListener("change", () => {
-        recognition.lang = language.value;
-      });
-    }
+      try {
+        recognition.start();
+      } catch (error) {
+        setStatus("মাইক্রোফোন চালু হয়নি: " + error.message);
+      }
+    });
   }
 
-  setStatus("Ready / প্রস্তুত");
-});
+  setStatus("বাংলা বা English-এ লিখুন অথবা মাইক্রোফোন চাপুন।");
+})();
