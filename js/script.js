@@ -30,3 +30,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("Mobile menu initialized successfully!");
 });
+const micBtn = document.getElementById("micBtn");
+
+if (micBtn) {
+  micBtn.addEventListener("click", function () {
+    if (!("speechSynthesis" in window)) {
+      alert("Your browser does not support voice.");
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const message = new SpeechSynthesisUtterance(
+      "Welcome, Rejaul! How can I help you today?"
+    );
+
+    message.lang = "en-IN";
+    message.rate = 0.9;
+    message.pitch = 1;
+
+    window.speechSynthesis.speak(message);
+  });
+}
