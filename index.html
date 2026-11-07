@@ -1,372 +1,536 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head> <meta name="google-site-verification" content="lFVZvjz3OT8OZI_W-H14gfuKK9CtwvsG0x7bbwoqOmc" />
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070914">
-  <meta name="description" content="Rejaul creates modern, responsive websites and digital experiences for individuals and small businesses.">
+  <meta name="theme-color" content="#080811">
+  <meta name="description" content="ZYCO GAMING - Play, Compete and Win. Explore Free Fire gaming, tournaments and videos.">
 
-  <title>Rejaul | Digital Services & Web Design</title>
+  <title>ZYCO GAMING | Play Beyond Limits</title>
 
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js" defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<meta name="description" content="Rejaul Digital Services offers web design, responsive website development, and digital solutions. Explore projects and contact Rejaul for your website needs.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://rejaulkha.github.io/mywebsite/">
+    html {
+      scroll-behavior: smooth;
+    }
 
-<meta property="og:title" content="Rejaul Digital Services | Web Design">
-<meta property="og:description" content="Explore web design, website projects, and digital services by Rejaul.">
-<meta property="og:url" content="https://rejaulkha.github.io/mywebsite/">
-<meta property="og:type" content="website">
-  
+    body {
+      background: #080811;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1150px;
+      margin: auto;
+    }
+
+    header {
+      background: rgba(10,10,22,.95);
+      border-bottom: 1px solid #27213c;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      min-height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 900;
+      color: #a879ff;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #c8c5d5;
+      font-size: 14px;
+      transition: .3s;
+    }
+
+    .nav-links a:hover {
+      color: #b38aff;
+    }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 27px;
+      cursor: pointer;
+    }
+
+    .hero {
+      min-height: 590px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 80% 45%, #49207855, transparent 55%),
+        linear-gradient(130deg,#080811,#111020);
+    }
+
+    .hero-content {
+      max-width: 720px;
+      padding: 100px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 15px;
+      border: 1px solid #8252d8;
+      border-radius: 30px;
+      color: #c7a6ff;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 9vw, 88px);
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -3px;
+    }
+
+    .hero h1 span {
+      color: #a879ff;
+      text-shadow: 0 0 35px #8c4cff66;
+    }
+
+    .hero p {
+      color: #aaa7bc;
+      max-width: 540px;
+      margin: 25px 0 32px;
+      font-size: 16px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      padding: 13px 24px;
+      border-radius: 7px;
+      display: inline-block;
+      font-weight: bold;
+      transition: .3s;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: linear-gradient(120deg,#8144ed,#b05cff);
+      color: white;
+      box-shadow: 0 5px 25px #974dff44;
+    }
+
+    .secondary {
+      border: 1px solid #7552a5;
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+    }
+
+    section {
+      padding: 85px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-title small {
+      color: #ae83ff;
+      letter-spacing: 3px;
+      font-weight: bold;
+    }
+
+    .section-title h2 {
+      font-size: 35px;
+      margin-top: 8px;
+    }
+
+    .section-title p {
+      color: #9995aa;
+      margin-top: 8px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: #121222;
+      border: 1px solid #28243c;
+      border-radius: 14px;
+      padding: 27px;
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-7px);
+      border-color: #995eff;
+      box-shadow: 0 10px 35px #8c4cff22;
+    }
+
+    .card-icon {
+      font-size: 38px;
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #a5a1b4;
+      font-size: 14px;
+    }
+
+    .card-link {
+      display: inline-block;
+      color: #b58bff;
+      margin-top: 18px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .tournament {
+      background: linear-gradient(120deg,#171029,#10101d);
+      border-top: 1px solid #29203e;
+      border-bottom: 1px solid #29203e;
+    }
+
+    .tournament-box {
+      border: 1px solid #7544c5;
+      border-radius: 16px;
+      padding: 35px;
+      text-align: center;
+      background: #171326;
+    }
+
+    .tournament-box h3 {
+      font-size: 28px;
+      color: #c29aff;
+      margin-bottom: 12px;
+    }
+
+    .tournament-box p {
+      color: #aaa5ba;
+      margin-bottom: 24px;
+    }
+
+    .video-box {
+      min-height: 200px;
+      background:
+        radial-gradient(circle at center,#40216a,#121222 70%);
+      border: 1px solid #44305d;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 25px;
+    }
+
+    .play-icon {
+      font-size: 55px;
+      color: #c09aff;
+    }
+
+    .video-box p {
+      color: #aaa5ba;
+      margin-top: 8px;
+    }
+
+    .community {
+      text-align: center;
+      background: linear-gradient(120deg,#26133f,#111020);
+    }
+
+    .community h2 {
+      font-size: 35px;
+      margin-bottom: 12px;
+    }
+
+    .community p {
+      color: #bbb4ca;
+      margin-bottom: 25px;
+    }
+
+    footer {
+      background: #06060d;
+      padding: 35px 0;
+      text-align: center;
+      border-top: 1px solid #252137;
+    }
+
+    footer p {
+      color: #9995aa;
+      font-size: 13px;
+    }
+
+    footer .logo {
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    @media(max-width:750px) {
+      .menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 75px;
+        left: 0;
+        width: 100%;
+        background: #10101e;
+        padding: 25px;
+        flex-direction: column;
+        border-bottom: 1px solid #45305f;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 520px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      section {
+        padding: 65px 0;
+      }
+
+      .section-title h2 {
+        font-size: 29px;
+      }
+    }
+  </style>
 </head>
-"<meta name="google-site-verification" content="lFVZvjz3OT8OZI_W-H14gfuKK9CtwvsG0x7bbwoqOmc" />"
+
 <body>
 
-<header class="header">
-  <div class="container nav">
-    <a href="#home" class="logo" aria-label="Rejaul home">
-      Rejaul<span>.</span>
-    </a>
+<header>
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">ZYCO<span>.</span></a>
 
-    <button
-      class="menu-toggle"
-      id="menuToggle"
-      aria-label="Open navigation menu"
-      aria-controls="mainNav"
-      aria-expanded="false"
-      type="button"
-    >
-      ☰
-    </button>
+      <button class="menu-btn" id="menuBtn"
+        aria-label="Open menu" aria-expanded="false">☰</button>
 
-    <nav id="mainNav" aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact" class="nav-cta">Let's Talk ↗</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#games">Games</a></li>
+        <li><a href="#tournament">Tournament</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="#community">Community</a></li>
+      </ul>
     </nav>
   </div>
 </header>
 
 <main>
-  
-<button id="micBtn" type="button" aria-label="Welcome voice">
-  🎤 Speak
-</button>
-  
 
-  <section id="home" class="hero">
-    <div class="container hero-content">
-      <p class="tag">✦ DIGITAL DESIGN & CREATIVE SOLUTIONS</p>
-
-      <h1>
-        Build your vision.<br>
-        <span>Grow your future.</span>
-      </h1>
-
-      <p class="intro">
-        I create clean, modern and responsive digital experiences
-        that help individuals and small businesses build their
-        online presence.
-      </p>
-
-      <div class="buttons">
-        <a href="#projects" class="btn primary">Explore My Work ↗</a>
-        <a href="#contact" class="btn secondary">Let's Connect</a>
-      </div>
-
-      <p class="hero-note">
-        <span class="status-dot"></span>
-        Available for projects and collaborations
-      </p>
-    </div>
-
-    <div class="hero-glow" aria-hidden="true"></div>
-  </section>
-
-  <section id="about" class="section">
-    <div class="container about-grid">
-      <div>
-        <p class="tag">01 — ABOUT ME</p>
-        <h2>Turning ideas into <span>digital experiences.</span></h2>
-      </div>
-
-      <div>
-        <p class="text">
-          Hi, I'm Rejaul. I enjoy building websites and exploring
-          creative technology. My focus is on simple design,
-          responsive layouts and useful digital solutions.
-        </p>
-
-        <p class="text">
-          My goal is to help people and small businesses present
-          their ideas professionally online.
-        </p>
-
-        <a href="#contact" class="text-link">Have a project in mind? Let's talk ↗</a>
-      </div>
-    </div>
-
-    <div class="container stats">
-      <div>
-        <strong>Responsive</strong>
-        <span>Mobile-friendly layouts</span>
-      </div>
-      <div>
-        <strong>Creative</strong>
-        <span>Modern visual design</span>
-      </div>
-      <div>
-        <strong>Focused</strong>
-        <span>Practical digital solutions</span>
-      </div>
-    </div>
-  </section>
-
-  <section id="services" class="section services">
+  <section class="hero" id="home">
     <div class="container">
-      <p class="tag">02 — WHAT I DO</p>
-      <h2>Services built around <span>your goals.</span></h2>
+      <div class="hero-content">
+        <div class="tag">WELCOME TO ZYCO GAMING</div>
 
-      <p class="section-intro">
-        Digital services to help bring your ideas to life.
-      </p>
+        <h1>
+          PLAY BEYOND<br>
+          <span>LIMITS.</span>
+        </h1>
+
+        <p>
+          Enter the world of gaming. Explore Free Fire,
+          enjoy epic gameplay and join the ZYCO gaming community.
+        </p>
+
+        <div class="buttons">
+          <a href="#games" class="btn primary">EXPLORE GAMES ↗</a>
+          <a href="#videos" class="btn secondary">WATCH VIDEOS</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="games">
+    <div class="container">
+
+      <div class="section-title">
+        <small>EXPLORE</small>
+        <h2>OUR GAMING WORLD</h2>
+        <p>Discover your next gaming adventure.</p>
+      </div>
 
       <div class="cards">
-        <article class="card">
-          <div class="icon">01 / WEB</div>
-          <h3>Web Design</h3>
-          <p>
-            Clean, modern and mobile-friendly websites for
-            personal brands and small businesses.
-          </p>
-          <a href="#contact" class="text-link">Discuss a website ↗</a>
-        </article>
 
-        <article class="card">
-          <div class="icon">02 / VIDEO</div>
-          <h3>Video Editing</h3>
-          <p>
-            Engaging edits for social media, YouTube and
-            creative digital content.
-          </p>
-          <a href="#contact" class="text-link">Discuss a project ↗</a>
-        </article>
+        <div class="card">
+          <div class="card-icon">🔥</div>
+          <h3>Free Fire</h3>
+          <p>Headshots, intense battles and amazing gameplay.</p>
+          <a href="#videos" class="card-link">Explore →</a>
+        </div>
 
-        <article class="card">
-          <div class="icon">03 / DIGITAL</div>
-          <h3>Digital Solutions</h3>
-          <p>
-            Practical digital support for online projects
-            and small business needs.
-          </p>
-          <a href="#contact" class="text-link">Explore solutions ↗</a>
-        </article>
+        <div class="card">
+          <div class="card-icon">🏆</div>
+          <h3>Esports</h3>
+          <p>Competitive gaming, challenges and tournaments.</p>
+          <a href="#tournament" class="card-link">Explore →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">🎮</div>
+          <h3>Gaming Community</h3>
+          <p>Connect with gamers and enjoy the gaming world.</p>
+          <a href="#community" class="card-link">Explore →</a>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <section id="projects" class="section projects">
+  <section class="tournament" id="tournament">
     <div class="container">
-      <p class="tag">03 — SELECTED WORK</p>
-      <h2>Projects & <span>experiments.</span></h2>
+      <div class="section-title">
+        <small>COMPETE & WIN</small>
+        <h2>TOURNAMENT HUB</h2>
+        <p>Get ready for exciting gaming battles.</p>
+      </div>
 
-      <p class="section-intro">
-        A look at my website development and creative journey.
-      </p>
-
-      <div class="project-grid">
-        <article class="project">
-          <div class="project-top">
-            <span>PROJECT 01</span>
-            <span>↗</span>
-          </div>
-          <h3>Personal Website</h3>
-          <p>
-            A responsive portfolio and digital services website
-            built with HTML, CSS and JavaScript.
-          </p>
-          <span class="project-label">HTML · CSS · JavaScript</span>
-        </article>
-
-        <article class="project">
-          <div class="project-top">
-            <span>PROJECT 02</span>
-            <span>↗</span>
-          </div>
-          <h3>Flask Web Backend</h3>
-          <p>
-            A learning project exploring backend routes,
-            JSON APIs and contact form integration.
-          </p>
-          <span class="project-label">Python · Flask · API</span>
-        </article>
+      <div class="tournament-box">
+        <h3>COMING SOON</h3>
+        <p>
+          ZYCO Gaming Tournament updates and registration
+          information will appear here.
+        </p>
+        <a href="#community" class="btn primary">STAY CONNECTED</a>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="section contact">
-    <div class="container contact-box">
-      <p class="tag">04 — GET IN TOUCH</p>
-      <h2>Have an idea?<br><span>Let's build it together.</span></h2>
+  <section id="videos">
+    <div class="container">
+      <div class="section-title">
+        <small>WATCH & ENJOY</small>
+        <h2>GAMING VIDEOS</h2>
+        <p>Funny moments, epic headshots and gaming highlights.</p>
+      </div>
 
-      <p class="text">
-        Tell me about your project, website or creative idea.
-        Let's explore how we can bring it to life.
-      </p>
+      <div class="cards">
 
-      <a
-        href="mailto:rk5575444@gmail.com?subject=Website%20Project%20Inquiry"
-        class="btn primary"
-      >
-        Email Me ↗
-      </a>
+        <div class="video-box">
+          <div class="play-icon">▶</div>
+          <h3>Funny Gameplay</h3>
+          <p>Funny gaming moments coming soon.</p>
+        </div>
+
+        <div class="video-box">
+          <div class="play-icon">▶</div>
+          <h3>Headshot Moments</h3>
+          <p>Epic Free Fire highlights coming soon.</p>
+        </div>
+
+        <div class="video-box">
+          <div class="play-icon">▶</div>
+          <h3>Gaming Montages</h3>
+          <p>Best gaming edits coming soon.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="community" id="community">
+    <div class="container">
+      <h2>JOIN THE ZYCO COMMUNITY</h2>
+      <p>Play hard. Have fun. Make every match legendary.</p>
+      <a href="#home" class="btn primary">BACK TO TOP ↑</a>
     </div>
   </section>
 
 </main>
 
-<footer class="footer">
-  <div class="container footer-content">
-    <a href="#home" class="logo">Rejaul<span>.</span></a>
-    <p>© 2026 Rejaul. Built with creativity.</p>
-    <a href="#home" class="text-link">Back to top ↑</a>
+<footer>
+  <div class="container">
+    <a href="#home" class="logo">ZYCO GAMING</a>
+    <p>Gaming is not just a game. It's a passion.</p>
+    <p>© 2026 ZYCO GAMING. All Rights Reserved.</p>
   </div>
 </footer>
-<!-- Rejaul Voice Assistant -->
-<div class="voice-assistant" id="voiceAssistant">
-  <button
-    class="voice-launcher"
-    id="voiceAssistantToggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="voiceAssistantPanel"
-  >
-    🎙️ Voice Assistant
-  </button>
 
-  <section
-    class="voice-panel"
-    id="voiceAssistantPanel"
-    aria-label="Voice Assistant"
-    hidden
-  >
-    <div class="voice-header">
-      <div>
-        <h2>Rejaul Assistant</h2>
-        <p>বাংলা ও English-এ কথা বলুন</p>
-      </div>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
 
-      <button
-        type="button"
-        id="voiceAssistantClose"
-        aria-label="Close assistant"
-      >✕</button>
-    </div>
+  menuBtn.addEventListener("click", function () {
+    const isOpen = navLinks.classList.toggle("active");
+    menuBtn.setAttribute("aria-expanded", isOpen);
+    menuBtn.textContent = isOpen ? "✕" : "☰";
+  });
 
-    <div
-      class="voice-messages"
-      id="voiceMessages"
-      aria-live="polite"
-    >
-      <p class="voice-message assistant-message">
-        নমস্কার! আমি কীভাবে সাহায্য করতে পারি?
-        <br />
-        Hello! How can I help you?
-      </p>
-    </div>
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.textContent = "☰";
+    });
+  });
+</script>
 
-    <p id="voiceStatus" role="status">
-      Ready / প্রস্তুত
-    </p>
-
-    <div class="voice-controls">
-      <button id="voiceMic" type="button">
-        🎤 Speak
-      </button>
-
-      <select id="voiceLanguage" aria-label="Voice language">
-        <option value="bn-IN">বাংলা</option>
-        <option value="en-IN">English</option>
-      </select>
-    </div>
-
-    <form id="voiceChatForm">
-      <label class="sr-only" for="voiceInput">
-        Ask the assistant
-      </label>
-
-      <input
-        id="voiceInput"
-        type="text"
-        placeholder="কথা লিখুন / Type a message"
-        autocomplete="off"
-      />
-
-      <button type="submit">Send</button>
-    </form>
-
-    <p class="voice-note">
-      Microphone ব্যবহারের জন্য browser permission প্রয়োজন।
-    </p>
-  </section>
-</div>
-<script src="js/voice-assistant.js" defer></script>
-</body> 
-<section id="portfolio" class="portfolio-section">
-  <div class="portfolio-container">
-    <p class="portfolio-label">MY WORK</p>
-    <h2>My Portfolio</h2>
-    <p class="portfolio-intro">
-      Explore my website project and digital services.
-    </p>
-
-    <div class="portfolio-grid">
-      <article class="portfolio-card">
-        <div class="portfolio-preview">
-          <span>01</span>
-          <h3>Rejaul Digital Services</h3>
-        </div>
-        <div class="portfolio-content">
-          <p>Website Design · Responsive Layout</p>
-          <p>
-            My personal digital services website,
-            built with HTML, CSS and JavaScript.
-          </p>
-          <a href="https://rejaulkha.github.io/mywebsite/"
-             target="_blank" rel="noopener noreferrer">
-            View Live Website →
-          </a>
-        </div>
-      </article>
-
-      <article class="portfolio-card">
-        <div class="portfolio-preview">
-          <span>02</span>
-          <h3>Web Design Services</h3>
-        </div>
-        <div class="portfolio-content">
-          <p>Web Design · Landing Pages</p>
-          <p>
-            I can help create a website tailored
-            to your project and business needs.
-          </p>
-          <a href="services.html">Explore Services →</a>
-        </div>
-      </article>
-    </div>
-
-    <div class="portfolio-contact">
-      <h3>Have a project in mind?</h3>
-      <p>Let's discuss your website requirements.</p>
-      <a href="contact.html" class="portfolio-button">
-        Contact Me
-      </a>
-    </div>
-  </div>
-</section>
+</body>
 </html>
