@@ -273,3 +273,21 @@
     transition: none;
   }
 }
+
+/* ZYCO GAMING HERO BANNER */
+
+.zyco-hero-banner {
+  width: 100%;
+  max-width: 1250px;
+  margin: 30px auto;
+  padding: 0 15px;
+}
+
+.zyco-hero-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(155,123,255,.4);
+  box-shadow: 0 0 30px rgba(155,123,255,.15);
+}
