@@ -132,3 +132,81 @@
     padding: 65px 16px;
   }
 }
+
+/* ZYCO SOCIAL MEDIA */
+
+.zyco-social {
+  padding: 80px 20px;
+  background: #070914;
+  color: #fff;
+}
+
+.social-container {
+  max-width: 850px;
+  margin: auto;
+  text-align: center;
+}
+
+.social-label {
+  color: #57e6ff;
+  letter-spacing: 3px;
+  font-size: 12px;
+}
+
+.social-container h2 {
+  margin: 18px 0;
+}
+
+.social-container h2 b {
+  color: #9b7bff;
+}
+
+.social-container > p {
+  color: #a1a9c2;
+  margin-bottom: 35px;
+}
+
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  background: #101528;
+  border: 1px solid #39305d;
+  border-radius: 18px;
+  text-align: left;
+}
+
+.social-icon {
+  font-size: 35px;
+}
+
+.social-info {
+  flex: 1;
+}
+
+.social-info p {
+  color: #a1a9c2;
+  margin-top: 5px;
+}
+
+.social-card a {
+  padding: 12px 20px;
+  background: #9b7bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+@media(max-width:450px) {
+  .social-card {
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .social-card a {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
