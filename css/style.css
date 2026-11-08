@@ -210,3 +210,66 @@
     font-size: 12px;
   }
 }
+
+/* =================================
+   ZYCO GAMING NEON ANIMATIONS
+================================= */
+
+.gaming-heading h2 {
+  animation: zycoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes zycoGlow {
+  from {
+    text-shadow: 0 0 8px #9b7bff;
+  }
+  to {
+    text-shadow:
+      0 0 18px #9b7bff,
+      0 0 35px #57e6ff;
+  }
+}
+
+.gamer-avatar {
+  animation: zycoPulse 2s infinite alternate;
+}
+
+@keyframes zycoPulse {
+  from {
+    box-shadow: 0 0 8px #9b7bff;
+  }
+  to {
+    box-shadow:
+      0 0 20px #9b7bff,
+      0 0 35px #57e6ff;
+  }
+}
+
+.game-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: #57e6ff;
+}
+
+.gaming-footer a {
+  transition: .3s ease;
+}
+
+.gaming-footer a:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 20px #57e6ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gaming-heading h2,
+  .gamer-avatar,
+  .game-card,
+  .gaming-footer a {
+    animation: none;
+    transition: none;
+  }
+}
